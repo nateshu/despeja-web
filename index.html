@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Despeja · Limpieza segura de Windows</title>
+<meta name="description" content="Despeja libera espacio en Windows 10 y 11 de forma segura: revisa, eliges y limpias. Gratis, sin anuncios y sin enviar datos.">
+<link rel="icon" href="img/icono-64.png">
+<!-- NATESHU: Página pública de Despeja (GitHub Pages). Solo presentación, descargas y privacidad:
+     el código del programa es privado y no está aquí. Español o inglés según el navegador. -->
+<style>
+  :root {
+    --brand:#394090; --warm:#e2762f; --warm-strong:#c25a1c; --warm-soft:#fdeedf;
+    --bg:#faf5ee; --card:#fffdf9; --text:#2a221c; --muted:#6f655b; --line:#ece2d5;
+    --grad:linear-gradient(135deg,#f2a23c 0%,#e2762f 55%,#d9583f 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --brand:#a9b0ff; --warm:#f4a259; --warm-strong:#ffb877; --warm-soft:#3a2616;
+      --bg:#16120f; --card:#201a16; --text:#f2eae2; --muted:#b3a596; --line:#362c24; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 "Segoe UI Variable Text","Segoe UI",system-ui,sans-serif; }
+  a { color:var(--warm-strong); }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 16px; }
+  header.top { position:sticky; top:0; z-index:5; background:var(--card); border-bottom:3px solid transparent;
+    border-image:linear-gradient(90deg,#394090,#8a4f8f 45%,#e2762f 80%,#f2a23c) 1; }
+  .top .wrap { display:flex; align-items:center; gap:14px; height:64px; }
+  .top .logo { height:26px; }
+  .top .sep { width:1px; height:26px; background:var(--line); }
+  .product { display:flex; align-items:center; gap:8px; }
+  .product img { width:36px; height:36px; }
+  .wordmark { font:italic 900 20px/1 "Segoe UI Black","Segoe UI",sans-serif; letter-spacing:.06em;
+    background:linear-gradient(90deg,#ff2bd6,#8b5cff 50%,#00b8d9); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .spacer { flex:1; }
+  .langs button { border:1px solid var(--line); background:var(--card); color:var(--text); border-radius:8px; padding:4px 10px; font:inherit; font-size:13px; cursor:pointer; }
+  .langs button.on { border-color:var(--warm); color:var(--warm-strong); font-weight:600; }
+  .logo-dark { display:none; }
+  @media (prefers-color-scheme: dark) { .logo-light { display:none; } .logo-dark { display:block; } }
+
+  .hero { color:#fff; background:linear-gradient(120deg,rgba(50,56,130,.92),rgba(118,62,122,.78) 50%,rgba(226,118,47,.72)),url(img/burbujas.jpg) center/cover; }
+  .hero .wrap { display:grid; grid-template-columns:1.1fr .9fr; gap:32px; align-items:center; padding-top:56px; padding-bottom:56px; }
+  .hero h1 { margin:0 0 12px; font-size:clamp(32px,5vw,48px); line-height:1.1; letter-spacing:-.02em; }
+  .hero p { margin:0 0 24px; font-size:18px; color:rgba(255,255,255,.9); }
+  .hero .icon { width:min(280px,70%); justify-self:center; filter:drop-shadow(0 18px 40px rgba(0,0,0,.35)); }
+  .cta { display:flex; flex-wrap:wrap; gap:12px; }
+  .btn { display:inline-flex; align-items:center; gap:10px; padding:13px 22px; border-radius:12px; font-weight:600; text-decoration:none; }
+  .btn.primary { background:var(--grad); color:#fff; box-shadow:0 6px 18px rgba(226,118,47,.35); }
+  .btn.light { background:#fff; color:#2c3274; }
+  .btn small { display:block; font-weight:400; font-size:12px; opacity:.85; }
+  .credit { font-size:11px; color:rgba(255,255,255,.7); text-align:right; padding:0 16px 8px; max-width:1080px; margin:0 auto; }
+
+  section { padding:56px 0 8px; }
+  h2 { font-size:28px; margin:0 0 8px; letter-spacing:-.01em; }
+  .lead { color:var(--muted); margin:0 0 28px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px; }
+  .card h3 { margin:0 0 6px; font-size:17px; }
+  .card p { margin:0; color:var(--muted); font-size:15px; }
+  .card .dot { width:40px; height:40px; border-radius:12px; background:var(--warm-soft); color:var(--warm-strong);
+    display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; }
+  .shots { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .shots img { width:100%; border-radius:12px; border:1px solid var(--line); box-shadow:0 8px 24px rgba(90,60,30,.12); }
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; font-size:15px; }
+  th, td { padding:12px 16px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:var(--warm-soft); }
+  tr:last-child td { border-bottom:0; }
+  .donate { display:flex; align-items:center; gap:20px; padding:24px; border-radius:16px; border:1px solid #f4c9b8;
+    background:linear-gradient(120deg,#fff4ef,#fdeedf 60%,#fbe9f3); }
+  @media (prefers-color-scheme: dark) { .donate { background:linear-gradient(120deg,#3a2016,#2e1d14 60%,#33182a); border-color:#6b3424; } }
+  .donate .grow { flex:1; }
+  .donate h3 { margin:0; color:var(--warm-strong); font-size:20px; }
+  .donate p { margin:4px 0 0; color:var(--muted); }
+  footer { margin-top:56px; padding:24px 0 40px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; text-align:center; }
+  footer a { color:inherit; }
+  @media (max-width:800px) {
+    .hero .wrap, .grid, .shots { grid-template-columns:1fr; }
+    .hero .icon { width:180px; }
+    .donate { flex-direction:column; text-align:center; }
+    .top .logo, .top .sep { display:none; }
+  }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <img class="logo logo-light" src="img/natesoft-claro.svg" alt="Natesoft">
+  <img class="logo logo-dark" src="img/natesoft-oscuro.svg" alt="Natesoft">
+  <div class="sep"></div>
+  <div class="product"><img src="img/despeja-simbolo.svg" alt=""><span class="wordmark">DESPEJA</span></div>
+  <div class="spacer"></div>
+  <div class="langs"><button data-set="es">ES</button> <button data-set="en">EN</button></div>
+</div></header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1 data-es="Despeja tu equipo, sin riesgos" data-en="Clear up your PC, safely"></h1>
+      <p data-es="Libera espacio en Windows 10 y 11: Despeja revisa, tú eliges y limpias. Gratis, sin anuncios y sin enviar tus datos."
+         data-en="Free up space on Windows 10 and 11: Despeja checks, you choose and clean. Free, no ads, no data sent."></p>
+      <div class="cta">
+        <a class="btn primary" href="https://apps.microsoft.com/detail/9N0K8H6BC3S4">
+          <span><span data-es="Microsoft Store" data-en="Microsoft Store"></span><small data-es="Gratis · muy pronto" data-en="Free · coming soon"></small></span></a>
+        <a class="btn light" href="https://github.com/nateshu/despeja-web/releases/latest">
+          <span><span data-es="Descarga directa" data-en="Direct download"></span><small data-es="Edición completa (.exe)" data-en="Full edition (.exe)"></small></span></a>
+      </div>
+    </div>
+    <img class="icon" src="img/icono-256.png" alt="Despeja">
+  </div>
+  <div class="credit" data-es="Foto: Daniele Levis Pelusi · Unsplash" data-en="Photo: Daniele Levis Pelusi · Unsplash"></div>
+</div>
+
+<main class="wrap">
+  <section>
+    <h2 data-es="Así funciona" data-en="How it works"></h2>
+    <p class="lead" data-es="Nada se borra hasta que tú lo decidas." data-en="Nothing is deleted until you decide."></p>
+    <div class="grid">
+      <div class="card"><div class="dot">1</div><h3 data-es="Diagnóstico" data-en="Diagnosis"></h3>
+        <p data-es="Al abrirlo revisa el equipo y te muestra cuánto espacio puedes liberar." data-en="On launch it checks your PC and shows how much space you can free."></p></div>
+      <div class="card"><div class="dot">2</div><h3 data-es="Tú eliges" data-en="You choose"></h3>
+        <p data-es="Marca o desmarca cada categoría. Presiona «Limpiar» cuando estés de acuerdo." data-en="Tick or untick each category. Press “Clean” when you agree."></p></div>
+      <div class="card"><div class="dot">3</div><h3 data-es="Ficha final" data-en="Summary"></h3>
+        <p data-es="Ves el espacio antes y después, los archivos borrados y la duración. Queda guardada como informe." data-en="See free space before and after, files removed and duration. It is saved as a report."></p></div>
+      <div class="card"><div class="dot">🧹</div><h3 data-es="Qué limpia" data-en="What it cleans"></h3>
+        <p data-es="Temporales viejos, informes de errores de Windows y cachés de Go y npm." data-en="Old temporary files, Windows error reports and Go and npm caches."></p></div>
+      <div class="card"><div class="dot">🛡️</div><h3 data-es="Qué nunca toca" data-en="What it never touches"></h3>
+        <p data-es="Tus documentos, fotos, proyectos, bases de datos ni la Papelera. Respeta los archivos en uso." data-en="Your documents, photos, projects, databases or the Recycle Bin. Files in use are left alone."></p></div>
+      <div class="card"><div class="dot">🌐</div><h3 data-es="Español e inglés" data-en="English and Spanish"></h3>
+        <p data-es="Toma el idioma de Windows; lo puedes cambiar en Ajustes. Tema claro y oscuro." data-en="Follows the Windows language; change it in Settings. Light and dark theme."></p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-es="Míralo" data-en="Take a look"></h2>
+    <p class="lead" data-es="Capturas de la edición de la Microsoft Store." data-en="Screenshots of the Microsoft Store edition."></p>
+    <div class="shots">
+      <img data-src="1-diagnostico.png" alt="">
+      <img data-src="2-ficha.png" alt="">
+      <img data-src="3-tema-oscuro.png" alt="">
+    </div>
+  </section>
+
+  <section>
+    <h2 data-es="Dos ediciones" data-en="Two editions"></h2>
+    <p class="lead" data-es="Las dos son gratis. Elige según lo que necesites." data-en="Both are free. Pick the one you need."></p>
+    <table>
+      <tr><th></th><th>Microsoft Store</th><th data-es="Descarga directa" data-en="Direct download"></th></tr>
+      <tr><td data-es="Permisos" data-en="Permissions"></td><td data-es="Usuario estándar" data-en="Standard user"></td><td data-es="Administrador" data-en="Administrator"></td></tr>
+      <tr><td data-es="Temporales, informes de errores, cachés Go y npm" data-en="Temp files, error reports, Go and npm caches"></td><td>✓</td><td>✓</td></tr>
+      <tr><td data-es="Temporales de Windows (C:\Windows\Temp)" data-en="Windows temp files (C:\Windows\Temp)"></td><td>—</td><td>✓</td></tr>
+      <tr><td data-es="Registro de Windows: solo entradas de programas que ya no existen, con copia" data-en="Windows registry: only entries of programs that no longer exist, backed up"></td><td>—</td><td>✓</td></tr>
+      <tr><td data-es="Actualizaciones automáticas" data-en="Automatic updates"></td><td>✓</td><td>—</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="donate">
+      <div class="grow"><h3 data-es="¿Te sirvió Despeja?" data-en="Did Despeja help you?"></h3>
+        <p data-es="Despeja es gratis. Si quieres apoyar su desarrollo, puedes donar lo que quieras por PayPal."
+           data-en="Despeja is free. If you want to support its development, you can donate any amount with PayPal."></p></div>
+      <a class="btn primary" href="https://www.paypal.com/donate/?business=nateshu%40yahoo.com.co&no_recurring=0&item_name=Apoyo+a+Despeja+de+Natesoft&currency_code=USD"
+         data-es="♥ Donar con PayPal" data-en="♥ Donate with PayPal"></a>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <div>© <span id="years">2019–2026</span> Natesoft · ALVARO NATES HUERTAS. <span data-es="Todos los derechos reservados." data-en="All rights reserved."></span></div>
+  <div><a href="mailto:nateshu@yahoo.com.co">nateshu@yahoo.com.co</a> · <a href="privacidad.html" data-es="Política de privacidad" data-en="Privacy policy"></a></div>
+</div></footer>
+
+<script>
+  // NATESHU: idioma de la página: el elegido antes (si se guardó), si no el del navegador; español o inglés.
+  function setLang(l) {
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-es]').forEach(function (el) { el.textContent = el.getAttribute('data-' + l); });
+    document.querySelectorAll('[data-src]').forEach(function (el) { el.src = 'img/' + l + '/' + el.getAttribute('data-src'); });
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-set') === l); });
+    document.title = l === 'en' ? 'Despeja · Safe Windows cleanup' : 'Despeja · Limpieza segura de Windows';
+    try { localStorage.setItem('despeja-lang', l); } catch (e) {}
+  }
+  var saved = null; try { saved = localStorage.getItem('despeja-lang'); } catch (e) {}
+  setLang(saved || ((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en'));
+  document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-set')); }); });
+  document.getElementById('years').textContent = '2019–' + Math.max(2026, new Date().getFullYear());
+</script>
+</body>
+</html>
