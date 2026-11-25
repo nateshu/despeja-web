@@ -1,0 +1,10 @@
+{
+    "version":  "1.5.0",
+    "url":  "https://github.com/nateshu/despeja-web/releases/download/v1.5.0/Despeja-1.5.0-instalador.exe",
+    "sha256":  "122303213b027fce2b4e0c8c11b9dccb2caf88ade24971e5810d9545aa6c2bbb",
+    "size":  6410259,
+    "notes":  {
+                  "es":  "Despeja ahora te avisa cuando hay una versión nueva y se actualiza con un clic. Lo revisa una vez al día, sin enviar datos, y lo puedes apagar en Ajustes.\nCorrecciones menores.",
+                  "en":  "Despeja now tells you when there is a new version and updates with one click. It checks once a day, sends no data, and you can turn it off in Settings.\nMinor fixes."
+              }
+}
